@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="C:\Users\sunjs\Desktop\學校\Sophomore\Fall Semester 2025\IN206A Web Programming\Assignments\webpage\exercise 06\style.css">
+    <title>Document</title>
+</head>
+<body>
+    <table>
+        <tr> 
+            <thead>
+                <th>Name</th> <th>Student ID</th>
+            </thead> 
+        </tr>
+        <tbody>
+            <tr> <td>Asiah Crutchfield 孫賽亞</td> <td>1133547</td> </tr>
+        </tbody>
+    </table>
+</body>
+</html>
