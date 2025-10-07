@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Example</title>
+</head>
+<body>
+  <h1>Sample Form</h1>
+  <form id="myForm">
+    <label for="input1">Input 1:</label>
+    <input type="text" id="input1" name="input1" value="Default1"><br><br>
+
+    <label for="input2">Input 2:</label>
+    <input type="text" id="input2" name="input2" value="Default2"><br><br>
+
+    <label for="input3">Input 3:</label>
+    <input type="text" id="input3" name="input3" value="Default3"><br><br>
+
+    <button type="submit">Submit</button>
+    <button type="reset">Reset</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('myForm');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault(); // Prevent actual submission
+      alert(`Submitted values:\nInput1: ${form.input1.value}\nInput2: ${form.input2.value}\nInput3: ${form.input3.value}`);
+    });
+  </script>
+</body>
+</html>
