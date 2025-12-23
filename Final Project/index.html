@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+    defer
+  ></script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="People First Cities: a people-first route planner with community suggestions (scenic routes, alerts, commuter tips) and an AI commuter coach. Built for SDG 11." />
+  <title>People First Cities</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <div id="logo" aria-hidden="true"></div>
+      <div>
+        <h1 id="app-title">People First Cities</h1>
+        <p class="muted small">Cities designed for people, not cars (or scooters) • SDG 11</p>
+      </div>
+    </div>
+
+    <div class="header-badges" aria-label="Project tags">
+      <span class="badge">Route Planner</span>
+      <span class="badge">Community</span>
+      <span class="badge">AI Coach</span>
+    </div>
+      <button type="button" id="theme-toggle" class="ghost theme-toggle" aria-pressed="false" title="Toggle dark mode">🌙 Dark</button>
+  </header>
+
+  <main class="container">
+    <!-- Route planner -->
+    <section id="route-planner" class="card">
+      <div class="card-header">
+        <h2>Route Planner</h2>
+        <p class="muted">Pick a start + destination, then get map markers, a quick summary, community suggestions, and AI commuter tips.</p>
+      </div>
+
+      <form id="route_form" aria-label="Route planning form">
+        <div id="route-form_start" class="location">
+          <label for="start">Start</label>
+          <input id="start" name="start" list="places" placeholder="Type a location..." autocomplete="off" aria-required="true" />
+          <datalist id="places"></datalist>
+        </div>
+
+        <div id="route-form_destination" class="location">
+          <label for="destination">Destination</label>
+          <input id="destination" name="destination" list="places" placeholder="Type a location..." autocomplete="off" aria-required="true" />
+        </div>
+
+        <div id="route-form_priority">
+          <h3>Preferred transport</h3>
+          <div class="priority-options" role="radiogroup" aria-label="Preferred transport mode">
+            <label class="priority-option">
+              <input type="radio" name="priority" value="walking" checked />
+              Walking
+            </label>
+
+            <label class="priority-option">
+              <input type="radio" name="priority" value="biking" />
+              Biking
+            </label>
+
+            <label class="priority-option">
+              <input type="radio" name="priority" value="transit" />
+              Transit
+            </label>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" id="route-btn" class="primary" disabled>Plan route</button>
+          <button type="button" id="swap-btn" class="ghost" disabled title="Swap start and destination">Swap</button>
+        </div>
+        <p id="form-hint" class="muted small">Tip: choose the most sustainable option that still keeps you safe.</p>
+      </form>
+
+      <div id="map" class="hidden" aria-live="polite">
+        <div class="summary">
+          <ul id="route-summary">
+            <li><span class="k">Route:</span> <span id="route-start"></span> → <span id="route-destination"></span></li>
+            <li><span class="k">Preferred:</span> <span id="preferred-mode"></span></li>
+            <li><span class="k">People-first recommendation:</span> <span id="recommended-mode"></span></li>
+            <li><span class="k">Approx. distance:</span> <span id="route-distance"></span></li>
+          </ul>
+        </div>
+        <div id="map-view" aria-label="Map view"></div>
+      </div>
+    </section>
+
+    <!-- AI Commuter Coach (rule-based; no API key) -->
+    <section id="ai-coach" class="card">
+      <div class="card-header">
+        <h2>AI Commuter Coach</h2>
+        <p class="muted">Rule-based “AI” that combines time-of-day safety + your route’s community notes.</p>
+      </div>
+
+      <button type="button" id="ai-btn" disabled>Generate AI tips</button>
+
+      <div id="ai-output" class="hidden">
+        <h3>Recommendation</h3>
+        <p id="ai-recommendation"></p>
+
+        <h3>Safety note</h3>
+        <p id="ai-safety"></p>
+
+        <h3>Extra tips</h3>
+        <ul id="ai-tips"></ul>
+      </div>
+    </section>
+
+    <!-- Community -->
+    <section id="community-section" class="grid">
+      <div id="scenic" class="card">
+        <h2>Scenic Suggestions</h2>
+        <ul id="scenic-list">
+          <li class="muted">Plan a route to see community suggestions.</li>
+        </ul>
+      </div>
+
+      <div id="alerts" class="card">
+        <h2>Alerts</h2>
+        <ul id="alerts-list">
+          <li class="muted">Plan a route to see route-specific alerts.</li>
+        </ul>
+
+        <button type="button" id="report-alert-btn" class="ghost">Report an alert</button>
+      </div>
+
+      <div id="tips" class="card">
+        <h2>Commuter Tips</h2>
+        <ul id="tips-list">
+          <li class="muted">Plan a route to see route-specific tips.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- Report Alert Modal (prototype) -->
+  <div id="alert-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-label="Report an alert">
+      <h2>Report an Alert</h2>
+      <p class="muted small">Prototype feature — submissions are not saved yet.</p>
+
+      <form id="alert-form">
+        <label>
+          Alert type
+          <select id="alert-type" required>
+            <option value="">Select one</option>
+            <option value="traffic">Heavy traffic</option>
+            <option value="construction">Construction</option>
+            <option value="safety">Safety concern</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+
+        <label>
+          Description
+          <textarea id="alert-description" rows="3" placeholder="Briefly describe the issue…" required></textarea>
+        </label>
+
+        <div class="modal-actions">
+          <button type="submit" class="primary">Submit</button>
+          <button type="button" class="ghost" id="close-alert-modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <span>Asiah &amp; Akmal &copy; <span id="footer-date"></span></span>
+  </footer>
+</body>
+</html>

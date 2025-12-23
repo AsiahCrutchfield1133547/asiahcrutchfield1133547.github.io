@@ -1,0 +1,28 @@
+{
+    "places": [
+        { "id": "yzu", "label": "Yuan Ze University" },
+        { "id": "ty_station", "label": "Taoyuan Station" },
+        { "id": "ty_night_market", "label": "Taoyuan Night Market" }
+    ], 
+
+    "routes": {
+        "yzu-ty_station":
+            {
+                "scenic": "The path along the creek behind YZU is quieter and has more trees. It’s a nicer walk than staying on the main road.",
+                "alerts": "Be cautious around the big intersection near the Zhongli–Taoyuan border. Cars turn quickly and scooters often roll through crosswalks.",
+                "tips": "If biking, use the bike lane on Chunri Road—it’s smoother and avoids most of the heavy traffic heading toward the station."
+            },
+        "ty_station-ty_night_market":
+            {
+                "scenic": "Walking through the small alley streets gives a more local feel and is shaded during the day.",
+                "alerts": "The sidewalks near the night market become extremely crowded after 6pm. Walk slowly and watch out for scooters weaving through the crowds.",
+                "tips": "Transit is often faster at peak hours—take a short bus ride if you're carrying shopping bags or tired from the station walk."
+            },
+        "yzu-ty_night_market":
+            {
+                "scenic": "Take the side roads near Hutoushan for a quieter walk with trees and small parks along the way.",
+                "alerts": "The uphill section near Hutoushan can be dark at night with limited street lighting—avoid walking alone late.",
+                "tips": "Combine biking + walking: bike most of the way, then park before entering the night market area since cycling isn’t allowed inside."
+            }
+    }
+}
